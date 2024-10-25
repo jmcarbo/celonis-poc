@@ -6,3 +6,4 @@ resources:
 - ./nats
 - ./cert-manager
 - ./keycloak
+- ./grafana
