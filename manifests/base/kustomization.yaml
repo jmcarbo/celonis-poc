@@ -9,3 +9,4 @@ resources:
 - ./grafana
 - ./prometheus
 - ./opal
+- ./temporal
