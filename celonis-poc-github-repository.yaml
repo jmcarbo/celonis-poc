@@ -22,8 +22,8 @@ spec:
     name: celonis-poc
   path: "./manifests/base"
   prune: true
-  timeout: 10m
-  retryInterval: 30s
+  timeout: 5m
+  retryInterval: 45s
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -41,7 +41,7 @@ spec:
   path: "./manifests/dbs"
   prune: true
   timeout: 5m
-  retryInterval: 30s
+  retryInterval: 45s
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -59,4 +59,4 @@ spec:
   path: "./manifests/extras"
   prune: true
   timeout: 2m
-  retryInterval: 30s
+  retryInterval: 45s
