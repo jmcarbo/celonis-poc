@@ -28,3 +28,15 @@ spec:
         name: permitio
         namespace: opal
       interval: 10m
+  values:
+    server:
+      port: 7002
+      policyRepoUrl: "https://github.com/permitio/opal-example-policy-repo"
+      policyRepoSshKey: null
+      policyRepoClonePath: null
+      policyRepoMainBranch: null
+      pollingInterval: 30
+      dataConfigSources:
+        # Option #1 - No data sources
+        config:
+          entries: [ ]
