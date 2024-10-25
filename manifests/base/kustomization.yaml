@@ -5,3 +5,4 @@ resources:
 - ./traefik
 - ./nats
 - ./cert-manager
+- ./keycloak

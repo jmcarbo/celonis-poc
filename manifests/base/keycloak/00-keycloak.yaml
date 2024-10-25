@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: codecentric
+  namespace: keycloak
+spec:
+  interval: 1m
+  url: https://codecentric.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: keycloakx
+      version: '>=2.5.1'
+      sourceRef:
+        kind: HelmRepository
+        name: codecentric
+        namespace: keycloak
+      interval: 10m
+  values:
+    command:
+      - "/opt/keycloak/bin/kc.sh"
+      - "start"
+      - "--http-port=8080"
+      - "--hostname-strict=false"
+    extraEnv: |
+      - name: KEYCLOAK_ADMIN
+        value: admin
+      - name: KEYCLOAK_ADMIN_PASSWORD
+        value: admin
+      - name: JAVA_OPTS_APPEND
+        value: >-
+          -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
