@@ -4,7 +4,7 @@ metadata:
   name: celonis-poc
   namespace: default
 spec:
-  interval: 5m0s
+  interval: 1m0s
   url: https://github.com/jmcarbo/celonis-poc
   ref:
     branch: main
@@ -15,7 +15,7 @@ metadata:
   name: celonis-poc-base
   namespace: default
 spec:
-  interval: 10m
+  interval: 1m
   wait: true
   sourceRef:
     kind: GitRepository
@@ -31,7 +31,7 @@ metadata:
   name: celonis-poc-dbs
   namespace: default
 spec:
-  interval: 10m
+  interval: 1m
   wait: true
   dependsOn:
     - name: celonis-poc-base
@@ -49,7 +49,7 @@ metadata:
   name: celonis-poc-extra
   namespace: default
 spec:
-  interval: 10m
+  interval: 1m
   wait: true
   dependsOn:
     - name: celonis-poc-base
