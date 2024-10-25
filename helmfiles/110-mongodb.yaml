@@ -1,8 +1,0 @@
-repositories:
-- name: mongodb
-  url: https://mongodb.github.io/helm-charts
-
-releases:
-- name: mongodb-operator
-  namespace: mongodb
-  chart: mongodb/community-operator
