@@ -40,3 +40,7 @@ spec:
         # Option #1 - No data sources
         config:
           entries: [ ]
+    client:
+      extraEnv:
+        OPAL_OPA_HEALTH_CHECK_POLICY_ENABLED: True
+        OPAL_DATA_UPDATER_ENABLED: False
