@@ -15,14 +15,14 @@ metadata:
   name: celonis-poc-base
   namespace: default
 spec:
-  interval: 1m
+  interval: 2m
   wait: true
   sourceRef:
     kind: GitRepository
     name: celonis-poc
   path: "./manifests/base"
   prune: true
-  timeout: 1m
+  timeout: 2m
   retryInterval: 30s
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -31,7 +31,7 @@ metadata:
   name: celonis-poc-dbs
   namespace: default
 spec:
-  interval: 1m
+  interval: 2m
   wait: true
   dependsOn:
     - name: celonis-poc-base
@@ -40,7 +40,7 @@ spec:
     name: celonis-poc
   path: "./manifests/dbs"
   prune: true
-  timeout: 1m
+  timeout: 2m
   retryInterval: 30s
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -49,7 +49,7 @@ metadata:
   name: celonis-poc-extra
   namespace: default
 spec:
-  interval: 1m
+  interval: 2m
   wait: true
   dependsOn:
     - name: celonis-poc-base
@@ -58,5 +58,5 @@ spec:
     name: celonis-poc
   path: "./manifests/extras"
   prune: true
-  timeout: 1m
+  timeout: 2m
   retryInterval: 30s
