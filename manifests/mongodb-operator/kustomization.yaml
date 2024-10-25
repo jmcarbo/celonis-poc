@@ -1,0 +1,4 @@
+resources:
+- 00-mongodb-namespace.yaml
+- 10-mongodb-helm-repository.yaml
+- 20-mongodb-helm-release.yaml

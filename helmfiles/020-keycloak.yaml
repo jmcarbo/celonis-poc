@@ -1,0 +1,12 @@
+
+repositories:
+- name: codecentric
+  url: https://codecentric.github.io/helm-charts
+
+
+releases:
+- name: keycloakx
+  namespace: keycloak
+  chart: codecentric/keycloakx
+  values:
+    - ../values/keycloak/values.yaml

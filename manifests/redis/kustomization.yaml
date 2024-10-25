@@ -1,0 +1,4 @@
+resources:
+- 00-redis-namespace.yaml
+- 10-redis-oci-repository.yaml
+- 20-redis-helm-release.yaml

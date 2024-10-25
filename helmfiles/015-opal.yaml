@@ -1,0 +1,9 @@
+repositories:
+- name: permitio
+  url: https://permitio.github.io/opal-helm-chart
+
+releases:
+- name: opal
+  namespace: opal
+  installed: true
+  chart: permitio/opal

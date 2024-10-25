@@ -1,0 +1,4 @@
+resources:
+- 00-postgres-namespace.yaml
+- 10-postgres-operator-helm-repository.yaml
+- 20-postgres-operator-helm-release.yaml

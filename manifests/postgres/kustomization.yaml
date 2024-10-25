@@ -1,0 +1,2 @@
+resources:
+- 10-postgres-cluster.yaml

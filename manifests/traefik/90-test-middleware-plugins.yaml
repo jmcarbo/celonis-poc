@@ -1,0 +1,27 @@
+# test-middleware-plugins.yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: test-middleware-plugins
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`test.127.0.0.1.nip.io`)
+      kind: Rule
+      services:
+        - name: noop@internal
+          kind: TraefikService
+      middlewares:                    # [5]
+        - name: middleware1             # [6]
+          namespace: default
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware1
+spec:
+  plugin:
+    staticresponse:
+      StatusCode: 444
+      Body: I said no response!
