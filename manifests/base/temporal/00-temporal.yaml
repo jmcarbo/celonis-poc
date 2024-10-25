@@ -30,8 +30,8 @@ spec:
       interval: 10m
   values:
     prometheus:
-      enabled: true
+      enabled: false
     grafana:
-      enabled: true
+      enabled: false
     elasticsearch:
       enabled: true
