@@ -8,3 +8,4 @@ resources:
 - ./keycloak
 - ./grafana
 - ./prometheus
+- ./opal
