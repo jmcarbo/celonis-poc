@@ -1,0 +1,49 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nats
+  namespace: nats
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: nats
+      version: '>=1.2.6'
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: nats
+        namespace: nats
+      interval: 10m
+  values:
+    config:
+      cluster:
+        enabled: true
+        replicas: 3
+        name: nats2
+      jetstream:
+        enabled: true
+        fileStore:
+          pvc:
+            size: 10Gi
+    container:
+      env:
+        # different from k8s units, suffix must be B, KiB, MiB, GiB, or TiB
+        # should be ~90% of memory limit
+        GOMEMLIMIT: 7GiB
+      merge:
+        # recommended limit is at least 2 CPU cores and 8Gi Memory for production JetStream clusters
+        resources:
+          requests:
+            cpu: "2"
+            memory: 8Gi
+          limits:
+            cpu: "2"
+            memory: 8Gi
+    podTemplate:
+      topologySpreadConstraints:
+        kubernetes.io/hostname:
+          maxSkew: 1
+          whenUnsatisfiable: DoNotSchedule
+
+
