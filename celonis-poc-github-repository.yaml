@@ -1,0 +1,24 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: celonis-poc
+  namespace: default
+spec:
+  interval: 5m0s
+  url: https://github.com/jmcarbo/celonis-poc
+  ref:
+    branch: main
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: celonis-poc
+  namespace: default
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: celonis-poc
+  path: "./manifests"
+  prune: true
+  timeout: 1m

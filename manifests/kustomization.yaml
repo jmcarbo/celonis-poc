@@ -1,7 +1,7 @@
 resources:
 - ./mongodb-operator
-- ./mongodb
 - ./postgres-operator/
-- ./postgres
 - ./redis
+- ./postgres
+- ./mongodb
 
