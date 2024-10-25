@@ -33,6 +33,8 @@ metadata:
 spec:
   interval: 10m
   wait: true
+  dependsOn:
+    - name: celonis-poc-base
   sourceRef:
     kind: GitRepository
     name: celonis-poc
