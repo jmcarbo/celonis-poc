@@ -4,9 +4,9 @@ resources:
 - ./redis
 - ./traefik
 - ./nats
-- ./cert-manager
+#- ./cert-manager
 - ./keycloak
 - ./grafana
 - ./prometheus
 - ./opal
-- ./temporal
+#- ./temporal
