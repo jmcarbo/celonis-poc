@@ -1,5 +1,5 @@
 resources:
-- ./mongodb-operator
+#- ./mongodb-operator
 - ./postgres-operator/
 - ./redis
 - ./traefik

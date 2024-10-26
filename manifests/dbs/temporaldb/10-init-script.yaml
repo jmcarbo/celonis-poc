@@ -8,23 +8,75 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: temporal-init-script
-  namespace: temporal
+  namespace: postgres
 data:
   init.sh: |
+    #!/bin/bash
+
     # Define PostgreSQL connection details
-    HOST="localhost"   # Change this to the server's hostname or IP
+    HOST="postgres-cluster.postgres"   # Change this to the server's hostname or IP
     PORT="5432"        # Default PostgreSQL port
-    USER="postgres"    # PostgreSQL user
     TIMEOUT="5"        # Seconds to wait before retrying
 
-    echo "Waiting for PostgreSQL server at $HOST:$PORT to be available..."
+    # Load PostgreSQL user and password from Kubernetes secret volume
+    USER=$(cat /secret-volume/username)
+    PASSWORD=$(cat /secret-volume/password)
+    export PGPASSWORD=$PASSWORD   # Set the password in the environment for psql to use
+
+    echo "Waiting for PostgreSQL server at $HOST:$PORT to be available... with $USER and $PASSWORD"
 
     # Loop until the server is up and running
-    until psql -h "$HOST" -p "$PORT" -U "$USER" -c '\q' 2>/dev/null; do
+    until psql -h "$HOST" -p "$PORT" -U "$USER" temporal -c '\q' 2>/dev/null; do
         echo "PostgreSQL is unavailable - sleeping for $TIMEOUT seconds"
         sleep $TIMEOUT
     done
 
     echo "PostgreSQL is up and running!"
+    export SQL_PLUGIN=postgres12
+    export SQL_HOST=$HOST
+    export SQL_PORT=5432
+    export SQL_USER=$USER
+    export SQL_PASSWORD=$PASSWORD
+    echo "Running Temporal schema update... $SQL_PLUGIN $SQL_HOST $SQL_PORT $SQL_USER $SQL_PASSWORD"
+    temporal-sql-tool --database temporal create-database
+    SQL_DATABASE=temporal temporal-sql-tool setup-schema -v 0.0
+    SQL_DATABASE=temporal temporal-sql-tool update -schema-dir schema/postgresql/v12/temporal/versioned
+    
+    temporal-sql-tool --database temporal_visibility create-database
+    SQL_DATABASE=temporal_visibility temporal-sql-tool setup-schema -v 0.0
+    SQL_DATABASE=temporal_visibility temporal-sql-tool update -schema-dir schema/postgresql/v12/visibility/versioned
 
     # Add any commands here that should run after the server is confirmed to be running
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-secret
+  namespace: postgres
+spec:
+  template:
+    spec:
+      containers:
+        - name: echo-secret
+          image: temporalio/admin-tools:1.25.1-tctl-1.18.1-cli-1.1.0
+          command: ["/bin/bash", "/etc/config-volume/init.sh"]
+          #args:
+          #  - "/bin/ls /etc/config-volume"
+          volumeMounts:
+            - name: secret-volume
+              mountPath: "/secret-volume"
+              readOnly: true
+            - name: config-volume
+              mountPath: "/etc/config-volume"
+              readOnly: true
+      restartPolicy: Never
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: celonis.postgres-cluster.credentials.postgresql.acid.zalan.do
+            optional: false
+        - name: config-volume
+          configMap:
+            name: temporal-init-script  # Replace with your actual ConfigMap name
+
+  backoffLimit: 4
