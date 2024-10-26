@@ -1,0 +1,30 @@
+# 10-temporal-database-init-script.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: temporal
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: temporal-init-script
+  namespace: temporal
+data:
+  init.sh: |
+    # Define PostgreSQL connection details
+    HOST="localhost"   # Change this to the server's hostname or IP
+    PORT="5432"        # Default PostgreSQL port
+    USER="postgres"    # PostgreSQL user
+    TIMEOUT="5"        # Seconds to wait before retrying
+
+    echo "Waiting for PostgreSQL server at $HOST:$PORT to be available..."
+
+    # Loop until the server is up and running
+    until psql -h "$HOST" -p "$PORT" -U "$USER" -c '\q' 2>/dev/null; do
+        echo "PostgreSQL is unavailable - sleeping for $TIMEOUT seconds"
+        sleep $TIMEOUT
+    done
+
+    echo "PostgreSQL is up and running!"
+
+    # Add any commands here that should run after the server is confirmed to be running
